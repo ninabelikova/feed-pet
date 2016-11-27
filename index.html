@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html ng-app="app">
+  <head>
+    <meta charset="utf-8">
+    <title>Feed your kitty cat</title>
+
+    <!-- Imports -->
+    <!-- Why are you here? -->
+    <!-- Stop peeking -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
+    <link rel="stylesheet" href="animate.css" media="screen" title="no title">
+    <link rel="stylesheet" href="csshake.min.css" media="screen" title="no title">
+    <link rel="stylesheet" href="style.min.css" media="screen" title="no title">
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+
+  </head>
+  <body ng-controller="Game">
+
+    <div class="story">
+
+      <p ng-show="has_started()">
+        Day {{ current_days()}}
+      </p>
+
+      <p ng-class="notify_class" class="notification" ng-show="show_noti">
+        {{ story_noti }}
+      </p>
+
+      <p class="animated bounceIn">
+        {{ story_text }}
+      </p>
+
+      <p class="pet-status animated bounceIn" ng-show="has_started()">
+        {{ pet_status() }}
+      </p>
+
+
+
+
+
+
+      <button class="shake-slow shake-constant shake-constant--hover" ng-click="progress_scene()" ng-show="is_current_button('next')">next</button>
+      <button class="shake-slow shake-constant shake-constant--hover" ng-click="load_home()" ng-show="is_current_button('fine')">fine</button>
+      <button class="shake-slow shake-constant shake-constant--hover" ng-click="feed()" ng-show="is_current_button('feed')">feed</button>
+
+  
+      <button ng-click="restart()">restart</button>
+
+    </div>
+
+  </body>
+</html>
