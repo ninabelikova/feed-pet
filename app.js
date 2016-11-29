@@ -1,6 +1,8 @@
 
-// todo: pet's affection increases when fed for certin days
+
 // todo: story progresses as the affection increases
+
+// todo: add about section on website
 
 
 
@@ -8,7 +10,8 @@ var app = angular.module('app', []);
 
 app.controller("Game", function($scope){
 
-  // game scenes
+
+  // game content (stories, texts)
 
   $scope.intro = ["It's snowing tonight.", "I'm quickly heading home, almost running, because my neck and my ears hurt from the cold.", "I didn't think to bring my scarf because it was just a quick trip to the grocery store.", "Now I wish I'd brought it with me.",
               "I can see my house just around the corner on the far end of this street.", "I can't wait to get home and curl up in a blanket by the electric fire.",
@@ -28,9 +31,12 @@ app.controller("Game", function($scope){
               " "];
   $scope.home = ["Your cat is blocking the view of your laptop, preventing you from working on your papers.", "Your cat is sleeping on your bed."];
 
+  $scope.cat_love_statements = {4:"Your cat seems to like you.", 8:"Your cat seems to be quite fond of you.", 15: "Your cat loves you."};
+
+  $scope.cat_descriptions = ["is sitting on your keyboard, preventing you from playing video games.", "is sleeping like a dog on your desk.", "is staring at the window, as if its own existence puzzles it.", "is blocking the door, preventing you from going out at all.", "meows at you and wants to cuddle.", "is sitting on your keyboard, preventing you from doing work.", "is meowing all day like it has composed an epic symphony.", "meows at you with affection.", "is sleeping.", "face-bumps you 10 times."]
+
 
   // game variables
-
 
   $scope.scene = [$scope.intro, $scope.home];
 
@@ -46,16 +52,9 @@ app.controller("Game", function($scope){
   $scope.show_noti = false;
   $scope.next_hide = false;
 
-  $scope.current_days = function() {
-    if (localStorage.getItem("days") != null) {
-      return localStorage.getItem("days");
-    } else {
-      return 0;
-    }
-  }
+  $scope.cat_description = "";
 
-
-
+  $scope.cat_love_requirements = Object.keys($scope.cat_love_statements).map(Number);
 
 
   // game engine
@@ -71,6 +70,10 @@ app.controller("Game", function($scope){
 
     $scope.check_intro();
     $scope.check_home();
+
+    if ($scope.first_level_achieved()) {
+      $scope.load_advanced_cat_status();
+    }
 
   }
 
@@ -119,6 +122,7 @@ app.controller("Game", function($scope){
     localStorage.removeItem("started");
     localStorage.removeItem("current_scene_num");
     localStorage.removeItem("days");
+    localStorage.removeItem("cat_status");
     $scope.load_scene(0);
   }
 
@@ -126,6 +130,10 @@ app.controller("Game", function($scope){
     if (localStorage.started === "yes") {
       return true;
     }
+  }
+
+  $scope.get_random_int = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
 
@@ -163,6 +171,9 @@ app.controller("Game", function($scope){
       var new_days = parseInt(localStorage.days) + 1;
       localStorage.setItem("days", new_days);
     }
+    if ($scope.first_level_achieved()) {
+      $scope.show_advanced_cat_status();
+    }
   }
 
   $scope.is_fed = function() {
@@ -179,15 +190,88 @@ app.controller("Game", function($scope){
     }
   }
 
+  $scope.current_days = function() {
+    if (localStorage.getItem("days") != null) {
+      return localStorage.getItem("days");
+    } else {
+      return 0;
+    }
+  }
 
-  // dev functions
+  $scope.current_days_int = function() {
+    if (localStorage.getItem("days") != null) {
+      return parseInt(localStorage.getItem("days"));
+    } else {
+      return 0;
+    }
+  }
+
+  $scope.cat_love_statement = function() {
+    var days = $scope.current_days_int();
+    var required_days = $scope.cat_love_requirements;
+    var achieved_level = 0;
+    var statement;
+
+
+    for(var i = 0; i < required_days.length-1; i++) {
+      if (days >= required_days[i]) {
+        achieved_level = required_days[i];
+      } else {
+        achieved_level = achieved_level > 0 ? achieved_level : 0;
+      }
+    }
+
+    if (achieved_level > 0) {
+      statement = $scope.cat_love_statements[achieved_level.toString()];
+      return statement;
+    }
+
+    return null;
+  }
+
+  $scope.show_advanced_cat_status = function() {
+    var random_num;
+  //  if ($scope.current_scene_num >= 1 && $scope.current_days_int >= $scope.cat_love_requirements[0]) {
+      random_num = $scope.get_random_int(0, $scope.cat_descriptions.length-1);
+      $scope.story_text = "";
+      $scope.cat_description = "Your cat " + $scope.cat_descriptions[random_num];
+
+      localStorage.setItem('cat_status', $scope.cat_description);
+  //  }
+  }
+
+  $scope.load_advanced_cat_status = function() {
+    if (localStorage.getItem('cat_status') != null) {
+      $scope.story_text = "";
+      $scope.cat_description = localStorage.getItem('cat_status');
+    }
+  }
+
+  $scope.first_level_achieved = function() {
+    return $scope.current_scene_num >= 1 && $scope.current_days_int >= $scope.cat_love_requirements[0];
+  }
+
+
+  // ------ website variables (not game related) ------
+
+  $scope.visible_credits = false;
+
+
+  // --------- website functions (not game related) -----
+
+  $scope.toggle_credits = function() {
+    $scope.visible_credits = !$scope.visible_credits;
+  }
+
+
+  // ---------- dev functions ----------------
 
   $scope.skip_scene = function() {
     $scope.current_line = $scope.current_scene.length -2;
   }
 
 
-  // initialise game
+  // ----------initialise game ----------------
 
   if (localStorage.getItem("current_scene_num") != null) {
     $scope.load_scene(localStorage.getItem("current_scene_num"));

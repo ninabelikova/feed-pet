@@ -1,13 +1,24 @@
+// variables
 
 $sea-green: #43CD80
 $peach-pink: #FF3E96
+$dark-pink: #75073a
+$big-screen: 1024px
+$medium-screen: 770px
+$small-screen: 460px
+
+
+// general
 
 body
   font-family: "Source Sans Pro", "Helvetica Neue", sans-serif
   padding-top: 3em
-  line-height: 4em
+  line-height: 2em
   width: 100%
   text-align: center
+
+  @media screen and (min-width : $small-screen )
+    line-height: 4em
 
 ::-moz-selection
   background-color: $peach-pink
@@ -26,15 +37,25 @@ button
   padding: .3em .5em
   cursor: pointer
 
-.story
-  font-size: 2em
-  width: 60%
-  margin-left: auto
-  margin-right: auto
-
+.text
+  font-size: 1.3em
+  @media screen and (min-width : $small-screen )
+    font-size: 1.8em
+  @media screen and (min-width : $big-screen )
+    font-size: 2em
   p
     text-align: left
 
+.story
+  width: 85%
+  margin-left: auto
+  margin-right: auto
+
+  @media screen and (min-width : $small-screen )
+    width: 70%
+
+  @media screen and (min-width : $big-screen )
+    width: 60%
 
 .notification
   font-size: 24px
@@ -42,3 +63,34 @@ button
   color: $sea-green
   padding-left: .5em
   border-radius: 15px
+
+.days span
+  background-color: $peach-pink
+  color: white
+  padding: .2em .5em
+  font-size: 1.1em
+
+.footer
+  width: 100%
+  position: fixed
+  left: 0
+  bottom: 12px
+  text-align: right
+
+  button
+    margin-right: 1em
+
+.credits
+  text-align: left
+  font-size: .7em
+  color: $peach-pink
+  border: 2px solid $peach-pink
+  border-radius: 15px
+  margin-top: 2em
+
+  p
+    padding-left: .8em
+    line-height: .8em
+
+  a
+    color: $peach-pink

@@ -3,6 +3,9 @@
   <head>
     <meta charset="utf-8">
     <title>Feed your kitty cat</title>
+    <meta name="description" content="A kitty feeding game. Or the story of how you had to go to the grocery twice.">
+    <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
+    <link rel="shortcut icon" href="favicon.ico">
 
     <!-- Imports -->
     <!-- Why are you here? -->
@@ -17,10 +20,10 @@
   </head>
   <body ng-controller="Game">
 
-    <div class="story">
+    <div class="text story">
 
-      <p ng-show="has_started()">
-        Day {{ current_days()}}
+      <p ng-show="has_started()" class="days">
+        <span>Day {{ current_days()}}</span>
       </p>
 
       <p ng-class="notify_class" class="notification" ng-show="show_noti">
@@ -28,15 +31,12 @@
       </p>
 
       <p class="animated bounceIn">
-        {{ story_text }}
+        {{ story_text }} {{ cat_description }}
       </p>
 
       <p class="pet-status animated bounceIn" ng-show="has_started()">
-        {{ pet_status() }}
+        {{ pet_status() }}   {{ cat_love_statement()}}
       </p>
-
-
-
 
 
 
@@ -44,9 +44,26 @@
       <button class="shake-slow shake-constant shake-constant--hover" ng-click="load_home()" ng-show="is_current_button('fine')">fine</button>
       <button class="shake-slow shake-constant shake-constant--hover" ng-click="feed()" ng-show="is_current_button('feed')">feed</button>
 
-  
-      <button ng-click="restart()">restart</button>
 
+      <!-- dev buttons, if you wanna play around go ahead
+
+      <button type="button" name="button" ng-click="skip_scene()">skip</button>
+      <button ng-click="show_advanced_cat_status()">show cat</button>
+      <button type="button" name="button" ng-click="restart()">restart</button>
+
+    -->
+
+
+      <div class="credits animated fadeInUp" ng-show="visible_credits">
+        <p>favicon by <a href="https://twitter.com/_Catleesi_">Hev</a></p>
+        <p>made with <a href="https://daneden.github.io/animate.css/">Animate.css</a>, <a href="https://elrumordelaluz.github.io/csshake/">CSShake</a>, AngularJS and Sass</p>
+      </div>
+
+
+    </div>
+
+    <div class="text footer">
+      <button class="animated flipInX" ng-click="toggle_credits()">credits</button>
     </div>
 
   </body>
